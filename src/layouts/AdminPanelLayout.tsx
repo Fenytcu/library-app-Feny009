@@ -40,7 +40,7 @@ export default function AdminPanelLayout({ children }: AdminPanelLayoutProps) {
       <header className="bg-white border-b border-[#EAECF0] sticky top-0 z-50">
         <div className="max-w-[1200px] mx-auto px-6 h-16 flex items-center justify-between">
           {/* Logo */}
-          <Link to="/admin/borrowed-list" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <img src="/assets/Logo.png" alt="Booky" className="h-8 w-8" />
             <span className="text-xl font-bold text-[#0A0D12]">Booky</span>
           </Link>

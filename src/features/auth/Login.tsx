@@ -62,7 +62,7 @@ export default function Login() {
         if (response.data.user.role === 'ADMIN') {
           navigate("/admin/borrowed-list")
         } else {
-          navigate("/home")
+          navigate("/")
         }
       } else {
         toast.error(response.message || "Login failed")

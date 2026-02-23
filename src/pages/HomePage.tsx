@@ -38,9 +38,6 @@ export default function HomePage() {
       <LandingNavbar />
       <main className="container mx-auto py-8 px-4">
       <div className="flex flex-col gap-8">
-
-
-// ... inside the component
         <div className="flex flex-col gap-4">
           <h1 className="text-3xl font-bold tracking-tight text-neutral-900">Library Catalog</h1>
           <p className="text-muted-foreground">
