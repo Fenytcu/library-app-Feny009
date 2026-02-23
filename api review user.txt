@@ -1,0 +1,89 @@
+Review
+Post/api/reviews - create or update my review for abook
+response body :
+{
+  "success": true,
+  "message": "Review saved",
+  "data": {
+    "review": {
+      "id": 29,
+      "star": 4,
+      "comment": "Bagus banget!",
+      "userId": 26,
+      "bookId": 5,
+      "createdAt": "2026-02-22T17:00:42.713Z"
+    },
+    "bookStats": {
+      "rating": 4.67,
+      "reviewCount": 3
+    }
+  }
+}
+
+
+Get /api/reviews/book/{bookId} - list reviews for a book
+response body :
+{
+  "success": true,
+  "message": "Success",
+  "data": {
+    "bookId": 5,
+    "reviews": [
+      {
+        "id": 29,
+        "star": 4,
+        "comment": "Bagus banget!",
+        "userId": 26,
+        "bookId": 5,
+        "createdAt": "2026-02-22T17:00:42.713Z",
+        "user": {
+          "id": 26,
+          "name": "Feny"
+        }
+      },
+      {
+        "id": 4,
+        "star": 5,
+        "comment": "Cara mancing yang baik dan bener, ketika banjir dan tanah longsor",
+        "userId": 10,
+        "bookId": 5,
+        "createdAt": "2026-02-19T17:53:53.926Z",
+        "user": {
+          "id": 10,
+          "name": "Ini Budi"
+        }
+      },
+      {
+        "id": 3,
+        "star": 5,
+        "comment": "Ini siapa yang iseng banget, masa buku disobek tinggal sampul doang, isi nya mana ?",
+        "userId": 2,
+        "bookId": 5,
+        "createdAt": "2026-02-19T16:35:00.036Z",
+        "user": {
+          "id": 2,
+          "name": "Admin"
+        }
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 10,
+      "total": 3,
+      "totalPages": 1
+    }
+  }
+}
+
+Delete /api/reviews/{id} - delete my review
+response body :
+{
+  "success": true,
+  "message": "Review deleted",
+  "data": {
+    "bookStats": {
+      "rating": 5,
+      "reviewCount": 2
+    }
+  }
+}

@@ -1,0 +1,25 @@
+Halaman Borrowed List Admin. 
+- Borrowed List, md:text-28px, text-24px, bold.
+- Search, img: public/assets/search.png, 15x15, 600x48, border-1px, radius-full, active searching name author/title book, text-14px, medium.
+- All, Active, Returned, Overdue -> tombol active saat dipilih text-#1C65DA border-#1C65DA, radius-full, width sesuai dengan text.
+- Container Box untuk Buku, shadow #CBCACA, blur 20, md:1200x250, 361x454, berisi :
+Sisi Kiri.
+ Status : md:text-16px, text-14px, bold, gap-12px, 
+ Active, 56x32, bg-#24A500, radius-4px, mb-20px, md:text-16px, text-14px
+- garis line 1160x0, mb-20px
+- Image book : 92x138. (saat versi mobil menjadi kolom kebawaah).
+- Category : 78x28, text-18px, bold, radius sm, border-1px, border-#D5D7DA, (saat versi mobil menjadi kolom kebawaah).
+- Book Name : Text-20px, Bold.(saat versi mobil menjadi kolom kebawaah).
+- Author Nam : text-16px, medium, #414651 (saat versi mobil menjadi kolom kebawaah).
+- Date, month, year . Duration 3 Days : Text-16px, bold. (saat versi mobil menjadi kolom kebawaah).
+
+sisi Kanan.
+- Due Date : bold, gap-12px, md:text-16px, text-14px (saat versi mobil menjadi 1 baris dengan Status, Active).
+date, month, year : text-14px, text-#EE1D52, radius-4px, 116x32, bg-#EE1D52, opacity 10% (saat versi mobil menjadi 1 baris dengan Status, Active).
+
+- borrower's name, text-16px, semibold. (saat versi mobil menjadi kolom kebawah).
+- Name, Text-20px, bold. (saat versi mobil menjadi kolom kebawaah).
+
+Data borrowed list sesuai data loan di Api. koneksikan. 
+Date, Nama peminjam juga sesuai data di Api.
+Desain saya lampirkan.
