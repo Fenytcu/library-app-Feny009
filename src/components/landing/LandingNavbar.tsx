@@ -89,7 +89,7 @@ export function LandingNavbar() {
 
   return (
     <nav className="border-b border-[#CBCACA] bg-white sticky top-0 z-50">
-      <div className="container mx-auto flex h-[72px] items-center justify-between px-4 md:px-10">
+      <div className="w-full flex h-[72px] items-center justify-between px-4 md:px-10">
         
         {/* Sisi Kiri: Logo & Nama Brand */}
         <Link to="/" className="flex items-center gap-2 md:gap-4 flex-shrink-0">

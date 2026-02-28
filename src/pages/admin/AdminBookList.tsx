@@ -44,6 +44,9 @@ export default function AdminBookList() {
     onSuccess: () => {
       toast.success("Book deleted successfully");
       queryClient.invalidateQueries({ queryKey: ['admin-books'] });
+      queryClient.invalidateQueries({ queryKey: ['admin-books-highfi'] });
+      queryClient.invalidateQueries({ queryKey: ['books'] });
+      queryClient.invalidateQueries({ queryKey: ['recommended-books'] });
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.message || "Failed to delete book");

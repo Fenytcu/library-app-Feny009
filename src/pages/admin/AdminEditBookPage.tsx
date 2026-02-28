@@ -34,11 +34,11 @@ const createBookSchema = z.object({
   title: z.string().min(2, "Title is required"),
   authorId: z.coerce.number().min(1, "Author is required"),
   categoryId: z.coerce.number().min(1, "Category is required"),
-  publishedYear: z.coerce.number().min(1000).max(new Date().getFullYear() + 1),
-  isbn: z.string().min(10, "ISBN is required"),
+  publishedYear: z.coerce.number().min(1000, "Invalid year").max(new Date().getFullYear() + 1, "Invalid year"),
+  isbn: z.string().min(6, "ISBN must be at least 6 digits").regex(/^\d+$/, "ISBN must contain only numbers"),
   totalCopies: z.coerce.number().min(1, "At least 1 copy is required"),
-  description: z.string().min(10, "Description is required"),
-  coverImage: z.string().url("Must be a valid URL"),
+  description: z.string().min(1, "Description is required"),
+  coverImage: z.union([z.literal(""), z.string().trim().url("Must be a valid URL")]).optional(),
 });
 
 type CreateBookValues = z.infer<typeof createBookSchema>;
@@ -61,6 +61,23 @@ export default function AdminEditBookPage() {
     queryFn: () => categoryApi.getCategories({ limit: 100 }), 
   });
 
+  const createAuthorMutation = useMutation({
+    mutationFn: (name: string) => authorApi.createAuthor({ name, bio: "", photo: "" }),
+    onSuccess: (response) => {
+      const newAuthor = response.data;
+      if (newAuthor) {
+        setAuthorSearch(newAuthor.name);
+        form.setValue("authorId", newAuthor.id);
+        toast.success(`Author "${newAuthor.name}" created!`);
+        setIsAuthorOpen(false);
+        queryClient.invalidateQueries({ queryKey: ["authors-edit-page"] });
+      }
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || "Failed to create author");
+    }
+  });
+
   const queryCall = useQuery({
     queryKey: ["admin-edit-book", id],
     queryFn: () => bookApi.getBook(Number(id)),
@@ -76,9 +93,9 @@ export default function AdminEditBookPage() {
       title: "",
       authorId: 0, 
       categoryId: 0,
-      publishedYear: 2024,
-      isbn: "978-0000000000", // Defaulting to satisfy API if not in design
-      totalCopies: 1,         // Defaulting to satisfy API if not in design
+      publishedYear: undefined as unknown as number,
+      isbn: "",
+      totalCopies: "" as unknown as number,
       description: "",
       coverImage: "",
     },
@@ -103,10 +120,11 @@ export default function AdminEditBookPage() {
 
   const mutation = useMutation({
     mutationFn: (data: CreateBookValues) => {
+       const payload = { ...data, coverImage: data.coverImage || "" };
        if (isEditMode) {
-         return bookApi.updateBook({ id: Number(id), data });
+         return bookApi.updateBook({ id: Number(id), data: payload });
        }
-       return bookApi.createBook(data);
+       return bookApi.createBook(payload);
     },
     onSuccess: () => {
       if (isEditMode) {
@@ -114,14 +132,17 @@ export default function AdminEditBookPage() {
       } else {
         toast.success("Add Success", {
           style: {
-            backgroundColor: "#2EAE7D",
+            backgroundColor: "#16a34a",
             color: "white",
-            fontWeight: "bold",
-            borderRadius: "20px",
+            border: "none",
+            borderRadius: "4px",
           },
         });
       }
       queryClient.invalidateQueries({ queryKey: ["admin-books-highfi"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-books"] });
+      queryClient.invalidateQueries({ queryKey: ["books"] });
+      queryClient.invalidateQueries({ queryKey: ["recommended-books"] });
       queryClient.invalidateQueries({ queryKey: ["admin-book-detail", Number(id)] });
       navigate("/admin/book-list");
     },
@@ -131,7 +152,23 @@ export default function AdminEditBookPage() {
   });
 
   function onSubmit(values: CreateBookValues) {
+    console.log("Submitting values:", values);
     mutation.mutate(values);
+  }
+
+  function onInvalid(errors: any) {
+    console.error("Form validation errors:", errors);
+    toast.error("Please fill in all required fields correctly.");
+    
+    // Auto-scroll to the first error field to improve UX
+    const firstErrorKey = Object.keys(errors)[0];
+    if (firstErrorKey) {
+      const errorElement = document.querySelector(`[name="${firstErrorKey}"]`);
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        (errorElement as HTMLElement).focus();
+      }
+    }
   }
 
   const backLink = isEditMode ? `/admin/book-list/detail/${id}` : "/admin/book-list";
@@ -153,7 +190,7 @@ export default function AdminEditBookPage() {
           <div className="flex justify-center py-20 text-[#1C65DA]"><Loader2 className="h-10 w-10 animate-spin" /></div>
         ) : (
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-6">
               <FormField
                 control={form.control}
                 name="title"
@@ -161,7 +198,7 @@ export default function AdminEditBookPage() {
                   <FormItem>
                     <FormLabel className="text-[14px] font-bold text-[#0A0D12]">Title</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter book title" {...field} className="h-12 rounded-[8px] border-[#EAECF0] shadow-none focus-visible:border-[#1C65DA] focus-visible:ring-0" />
+                      <Input {...field} className="h-12 rounded-[8px] border-[#EAECF0] shadow-none focus-visible:border-[#1C65DA] focus-visible:ring-0" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -175,22 +212,57 @@ export default function AdminEditBookPage() {
                   <FormItem className="relative">
                     <FormLabel className="text-[14px] font-bold text-[#0A0D12]">Author</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Search author..."
+                        <Input
+                        name={field.name}
                         value={authorSearch}
-                        onChange={(e) => { setAuthorSearch(e.target.value); setIsAuthorOpen(true); }}
+                        onChange={(e) => { 
+                          setAuthorSearch(e.target.value); 
+                          setIsAuthorOpen(true);
+                          form.setValue("authorId", 0, { shouldValidate: true }); 
+                        }}
                         onFocus={() => setIsAuthorOpen(true)}
-                        onBlur={() => setTimeout(() => setIsAuthorOpen(false), 200)}
+                        onBlur={() => setTimeout(() => {
+                          setIsAuthorOpen(false);
+                          // Auto match string to existing author ID if user didn't click
+                          if (authorSearch) {
+                             const exactMatch = authorsData?.data?.authors?.find(a => a.name.toLowerCase() === authorSearch.toLowerCase());
+                             if (exactMatch) {
+                                form.setValue("authorId", exactMatch.id, { shouldValidate: true });
+                             }
+                          }
+                        }, 200)}
                         className="h-12 rounded-[8px] border-[#EAECF0] shadow-none focus-visible:border-[#1C65DA] focus-visible:ring-0"
                       />
                     </FormControl>
-                    {isAuthorOpen && authorsData?.data?.authors && (
+                    {isAuthorOpen && (
                       <div className="absolute z-50 w-full bg-white border rounded-md shadow-xl mt-1 max-h-60 overflow-auto border-[#EAECF0]">
-                        {authorsData.data.authors.map((a) => (
-                          <div key={a.id} onMouseDown={(e) => e.preventDefault()} onClick={() => { field.onChange(a.id); setAuthorSearch(a.name); }} className="p-3 hover:bg-blue-50 cursor-pointer text-sm font-medium border-b border-[#F2F4F7] last:border-0">
+                        {authorsData?.data?.authors?.map((a) => (
+                          <div 
+                            key={a.id} 
+                            onMouseDown={(e) => e.preventDefault()} 
+                            onClick={() => { field.onChange(a.id); setAuthorSearch(a.name); setIsAuthorOpen(false); }} 
+                            className="p-3 hover:bg-blue-50 cursor-pointer text-sm font-medium border-b border-[#F2F4F7] last:border-0"
+                          >
                             {a.name}
                           </div>
                         ))}
+                        {authorSearch.length > 0 && !authorsData?.data?.authors?.some(a => a.name.toLowerCase() === authorSearch.toLowerCase()) && (
+                           <div 
+                             onMouseDown={(e) => e.preventDefault()}
+                             onClick={() => {
+                               if (!createAuthorMutation.isPending) {
+                                  createAuthorMutation.mutate(authorSearch);
+                               }
+                             }}
+                             className="p-3 hover:bg-blue-50 cursor-pointer text-sm font-bold text-[#1C65DA] border-t border-[#F2F4F7] flex items-center justify-between"
+                           >
+                             <span>+ Add "{authorSearch}"</span>
+                             {createAuthorMutation.isPending && <Loader2 className="w-4 h-4 animate-spin" />}
+                           </div>
+                        )}
+                        {authorsData?.data?.authors?.length === 0 && authorSearch.length === 0 && (
+                          <div className="p-3 text-sm text-gray-500 font-medium">Type to search or create an author</div>
+                        )}
                       </div>
                     )}
                     <FormMessage />
@@ -210,7 +282,7 @@ export default function AdminEditBookPage() {
                           <SelectValue placeholder="Select Category" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent className="rounded-[8px] border-[#EAECF0]">
+                      <SelectContent className="rounded-[8px] border-[#EAECF0] bg-white">
                         {categoriesData?.data?.categories.map((c) => (
                           <SelectItem key={c.id} value={String(c.id)}>{c.name}</SelectItem>
                         ))}
@@ -231,9 +303,37 @@ export default function AdminEditBookPage() {
                 name="publishedYear" 
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[14px] font-bold text-[#0A0D12]">Number of Pages</FormLabel>
+                    <FormLabel className="text-[14px] font-bold text-[#0A0D12]">Year Publish</FormLabel>
                     <FormControl>
-                      <Input type="number" placeholder="Enter number of pages" {...field} onChange={e => field.onChange(Number(e.target.value))} className="h-12 rounded-[8px] border-[#EAECF0] shadow-none focus-visible:border-[#1C65DA] focus-visible:ring-0" />
+                      <Input type="number" {...field} value={field.value ?? ""} onChange={e => field.onChange(e.target.value ? Number(e.target.value) : "")} className="h-12 rounded-[8px] border-[#EAECF0] shadow-none focus-visible:border-[#1C65DA] focus-visible:ring-0" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="isbn" 
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-[14px] font-bold text-[#0A0D12]">ISBN</FormLabel>
+                    <FormControl>
+                      <Input type="text" {...field} className="h-12 rounded-[8px] border-[#EAECF0] shadow-none focus-visible:border-[#1C65DA] focus-visible:ring-0" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="totalCopies"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-[14px] font-bold text-[#0A0D12]">Stock</FormLabel>
+                    <FormControl>
+                      <Input type="number" {...field} value={field.value ?? ""} onChange={e => field.onChange(e.target.value ? Number(e.target.value) : "")} className="h-12 rounded-[8px] border-[#EAECF0] shadow-none focus-visible:border-[#1C65DA] focus-visible:ring-0" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -247,7 +347,7 @@ export default function AdminEditBookPage() {
                   <FormItem>
                     <FormLabel className="text-[14px] font-bold text-[#0A0D12]">Description</FormLabel>
                     <FormControl>
-                      <Textarea placeholder="Enter book description..." {...field} className="min-h-[160px] rounded-[8px] border-[#EAECF0] shadow-none focus-visible:border-[#1C65DA] focus-visible:ring-0 leading-relaxed" />
+                      <Textarea {...field} className="min-h-[160px] rounded-[8px] border-[#EAECF0] shadow-none focus-visible:border-[#1C65DA] focus-visible:ring-0 leading-relaxed" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

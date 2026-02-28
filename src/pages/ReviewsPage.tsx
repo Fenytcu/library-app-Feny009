@@ -32,7 +32,7 @@ export default function ReviewsPage() {
     <div className="min-h-screen bg-neutral-50 font-quicksand flex flex-col">
       <LandingNavbar />
 
-      <main className="flex-1 container mx-auto px-4 md:px-10 py-6 md:py-10 max-w-[1000px]">
+      <main className="w-full mx-auto py-8 px-4 md:px-10">
         <h1 className="text-[24px] md:text-[28px] font-bold text-[#0A0D12] mb-6">Reviews</h1>
 
         {/* Search */}

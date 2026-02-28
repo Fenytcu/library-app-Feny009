@@ -15,7 +15,7 @@ export default function LandingPage() {
         
         <CategorySection />
         
-        <section className="container mx-auto px-4 pt-8">
+        <section className="w-full px-4 md:px-10 pt-8">
           {/* We use RecommendedBooks but we manage the title outside or let it handle it. 
               Since I updated RecommendedBooks to take a title prop, I can use that. 
               But wait, the design shows "Recommendation" as title. 
@@ -38,11 +38,11 @@ export default function LandingPage() {
           */}
         </section>
 
-        <div className="container mx-auto px-4 mt-[48px]">
+        <div className="w-full px-4 md:px-10 mt-[48px]">
           <hr className="border-[#D5D7DA]" />
         </div>
         
-        <section className="container mx-auto px-4 mt-[48px] mb-8">
+        <section className="w-full px-4 md:px-10 mt-[48px] mb-8">
              {/* Popular Authors usually has its own internal title, let's customize it too */}
              <PopularAuthors title="Popular Authors" />
         </section>

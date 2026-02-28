@@ -46,12 +46,10 @@ export function RecommendedBooks({
   return (
     <div className="space-y-6">
       {title && (
-        <div className="flex items-center justify-between mb-[40px]">
-          <h2 className="text-[36px] font-bold tracking-tight font-quicksand">{title}</h2>
-        </div>
+          <h2 className="text-[24px] md:text-[36px] font-bold tracking-tight font-quicksand">{title}</h2>
       )}
 
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-[16px] md:gap-[20px]">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-[16px] md:gap-[24px]">
         {data.pages.map((group, i) => (
           group.data.books.map((book) => (
             <BookCard key={`${book.id}-${i}`} book={book} />

@@ -181,7 +181,7 @@ export default function CategoryPage() {
     <div className="min-h-screen bg-neutral-50 font-quicksand">
       <LandingNavbar />
 
-      <main className="container mx-auto px-4 md:px-10 py-8 md:py-12">
+      <main className="w-full px-4 md:px-10 py-8 md:py-12 flex flex-col md:flex-row gap-8">
         {/* Page Title */}
         <h1 className="text-[28px] md:text-[36px] font-bold text-neutral-900 mb-6 md:mb-8">
           Book List

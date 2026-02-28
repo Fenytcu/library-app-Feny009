@@ -36,7 +36,7 @@ export function PopularAuthors({ title = "Popular Authors" }: { title?: string }
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[16px] md:gap-[20px]">
         {data.data.authors.map((author) => (
           <Link to={`/authors/${author.id}`} key={author.id} className="group">
-            <div className="w-full md:w-[285px] h-[113px] bg-white rounded-[12px] p-[16px] shadow-[0_0_20px_rgba(203,202,202,0.25)] hover:shadow-[0_0_25px_rgba(203,202,202,0.4)] transition-all flex items-center gap-[16px]">
+            <div className="w-full h-[113px] bg-white rounded-[12px] p-[16px] shadow-[0_0_20px_rgba(203,202,202,0.25)] hover:shadow-[0_0_25px_rgba(203,202,202,0.4)] transition-all flex items-center gap-[16px]">
               <div className="w-[81px] h-[81px] rounded-full overflow-hidden flex-shrink-0 bg-blue-100 flex items-center justify-center">
                 {author.photo && author.photo.startsWith("http") ? (
                   <img

@@ -20,8 +20,8 @@ export function CategorySection() {
   const { name: activeSlug } = useParams<{ name?: string }>()
 
   return (
-    <section className="container mx-auto px-4 py-8">
-      <div className="grid grid-cols-3 md:grid-cols-6 font-quicksand justify-center gap-[8px] md:gap-[16px]">
+    <section className="w-full px-4 md:px-10 py-8">
+      <div className="grid grid-cols-3 md:grid-cols-6 font-quicksand justify-center gap-[8px] md:gap-[24px]">
         {categories.map((category) => {
           const isActive = activeSlug === category.slug
 
@@ -29,7 +29,7 @@ export function CategorySection() {
             <Link
               key={category.name}
               to={`/category/${category.slug}`}
-              className={`w-full h-[100px] md:h-[130px] rounded-[12px] md:rounded-[16px] p-[8px] md:p-[12px] flex flex-col items-center gap-[8px] md:gap-[12px] transition-all group
+              className={`w-full aspect-[4/3] rounded-[12px] p-[8px] md:p-[16px] flex flex-col items-center justify-between gap-[8px] md:gap-[16px] transition-all group
                 ${isActive
                   ? "bg-blue-600 shadow-[0_4px_24px_rgba(37,99,235,0.35)]"
                   : "bg-white shadow-[0_0_20px_rgba(203,202,202,0.25)] hover:shadow-[0_0_25px_rgba(203,202,202,0.4)]"
@@ -49,7 +49,7 @@ export function CategorySection() {
                 />
               </div>
               <span
-                className={`text-[12px] md:text-[16px] font-semibold font-quicksand truncate w-full text-center md:text-left transition-colors
+                className={`text-[12px] md:text-[18px] font-semibold font-quicksand truncate w-full text-center transition-colors
                   ${isActive ? "text-white" : "text-neutral-900"}`}
               >
                 {category.name}

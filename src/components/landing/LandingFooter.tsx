@@ -11,13 +11,13 @@ const SOCIAL_LINKS = [
 export function LandingFooter() {
   return (
     <footer className="bg-white py-12 border-t">
-      <div className="container mx-auto px-4 flex flex-col items-center text-center">
+      <div className="w-full px-4 md:px-10 flex flex-col items-center text-center">
         <div className="flex items-center gap-2 mb-4">
           <img src="/assets/Logo.png" alt="Booky Logo" className="h-10 w-10" />
           <span className="text-[32px] font-bold text-neutral-950 font-quicksand">Booky</span>
         </div>
 
-        <p className="text-neutral-950 md:max-w-[1140px] max-w-[361px] text-center md:text-[16px] text-[14px] font-semibold mb-10 font-quicksand">
+        <p className="text-neutral-950 max-w-[361px] md:max-w-3xl text-center text-[14px] md:text-[18px] font-semibold mb-10 font-quicksand leading-relaxed">
           Discover inspiring stories &amp; timeless knowledge, ready to borrow anytime. Explore online or visit our nearest library branch.
         </p>
 

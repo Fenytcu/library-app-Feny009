@@ -117,7 +117,7 @@ export default function CartPage() {
     return (
       <div className="min-h-screen bg-neutral-50 font-quicksand">
         <LandingNavbar />
-        <div className="container mx-auto px-4 py-16 flex flex-col items-center gap-6 text-center">
+        <div className="w-full px-4 md:px-10 py-8 md:py-12 flex flex-col items-center gap-6 text-center">
           <div className="w-20 h-20 rounded-full bg-blue-50 flex items-center justify-center">
             <ShoppingCart className="w-10 h-10 text-blue-400" />
           </div>
@@ -201,7 +201,7 @@ export default function CartPage() {
     <div className="min-h-screen bg-neutral-50 font-quicksand pb-[88px] md:pb-0">
       <LandingNavbar />
 
-      <main className="container mx-auto px-4 md:px-10 py-8 md:py-12">
+      <main className="w-full px-4 md:px-10 py-8 md:py-12">
         {/* Page Title */}
         <h1 className="text-[28px] md:text-[36px] font-bold text-neutral-900 mb-6 md:mb-8">
           My Cart

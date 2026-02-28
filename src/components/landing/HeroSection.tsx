@@ -29,16 +29,15 @@ export function HeroSection() {
   }, []);
 
   return (
-    <section className="container mx-auto px-4 md:mt-[48px] mt-[16px]">
+    <section className="w-full px-4 md:px-10 md:mt-[48px] mt-[16px]">
       <Swiper
         modules={[Pagination, Autoplay]}
         pagination={{ clickable: true }}
-        autoplay={{ delay: 5000 }}
-        className="rounded-[16px] md:rounded-[32px] overflow-hidden"
+        className="w-full"
       >
         {/* --- SLIDE 1: WELCOME (STATIS) --- */}
         <SwiperSlide>
-          <div className="relative w-full aspect-[361/133] md:aspect-[1200/441] overflow-hidden rounded-[16px] md:rounded-[32px]">
+          <div className="relative w-full h-[180px] md:h-[441px] overflow-hidden rounded-[16px] md:rounded-[32px]">
             {/* Background */}
             <img 
               src="/assets/background-welcome.png" 
@@ -60,7 +59,7 @@ export function HeroSection() {
         {recommendedBooks.map((book) => (
           <SwiperSlide key={book.id}>
             <Link to="/reviews" className="block">
-              <div className="relative w-full aspect-[361/133] md:aspect-[1200/441] bg-slate-200">
+              <div className="relative w-full h-[220px] md:h-[441px] bg-slate-200 overflow-hidden rounded-[16px] md:rounded-[32px]">
                 <img 
                   src={book.coverImage} 
                   alt={book.title} 
@@ -88,7 +87,8 @@ export function HeroSection() {
       <style>{`
         .swiper-pagination-bullet { background: #BFDBFE; opacity: 1; transition: width 0.3s; }
         .swiper-pagination-bullet-active { background: #2563EB; width: 20px; border-radius: 4px; }
-        .swiper { padding-bottom: 40px; }
+        .swiper { padding-bottom: 30px; }
+        .swiper-pagination { bottom: 0 !important; }
       `}</style>
     </section>
   );

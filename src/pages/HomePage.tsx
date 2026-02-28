@@ -36,7 +36,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-neutral-50 font-quicksand">
       <LandingNavbar />
-      <main className="container mx-auto py-8 px-4">
+      <main className="w-full px-4 md:px-10 py-8">
       <div className="flex flex-col gap-8">
         <div className="flex flex-col gap-4">
           <h1 className="text-3xl font-bold tracking-tight text-neutral-900">Library Catalog</h1>

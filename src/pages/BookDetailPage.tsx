@@ -101,7 +101,7 @@ export default function BookDetailPage() {
     <div className="min-h-screen bg-white font-quicksand">
       <LandingNavbar />
 
-      <main className="container mx-auto px-4 md:px-10 py-8 pb-20 md:pb-16">
+      <main className="w-full px-4 md:px-10 py-8 pb-20 md:pb-16">
         {/* Breadcrumbs */}
         <nav className="flex items-center gap-2 text-sm text-neutral-500 mb-8 overflow-x-auto whitespace-nowrap scrollbar-hide">
           <Link to="/" className="text-blue-600 font-bold hover:underline">Home</Link>
@@ -153,15 +153,15 @@ export default function BookDetailPage() {
             <div className="grid grid-cols-3 gap-0 mb-8 py-6 border-y border-[#F2F4F7]">
                <div className="flex flex-col items-center md:items-start justify-center">
                   <p className="text-[24px] md:text-[32px] font-bold text-neutral-900 leading-none mb-2">{book.publishedYear || "---"}</p>
-                  <p className="text-[14px] md:text-[16px] text-neutral-500 font-medium">Year</p>
+                  <p className="text-[14px] md:text-[16px] text-neutral-500 font-medium">Year Publish</p>
                </div>
                <div className="flex flex-col items-center md:items-start justify-center border-x border-[#F2F4F7] px-2 md:px-10">
-                  <p className="text-[24px] md:text-[32px] font-bold text-neutral-900 leading-none mb-2">{book.rating?.toFixed(1) || "0.0"}</p>
-                  <p className="text-[14px] md:text-[16px] text-neutral-500 font-medium">Rating</p>
+                  <p className="text-[24px] md:text-[32px] font-bold text-neutral-900 leading-none mb-2">{book.totalCopies ?? 0}</p>
+                  <p className="text-[14px] md:text-[16px] text-neutral-500 font-medium">Stock</p>
                </div>
                <div className="flex flex-col items-center md:items-start justify-center px-2 md:px-10">
-                  <p className="text-[24px] md:text-[32px] font-bold text-neutral-900 leading-none mb-2">{book.reviewCount || 0}</p>
-                  <p className="text-[14px] md:text-[16px] text-neutral-500 font-medium">Reviews</p>
+                  <p className="text-[24px] md:text-[32px] font-bold text-neutral-900 leading-none mb-2">{book.rating?.toFixed(1) || "0.0"}</p>
+                  <p className="text-[14px] md:text-[16px] text-neutral-500 font-medium">Rating</p>
                </div>
             </div>
 
@@ -177,18 +177,18 @@ export default function BookDetailPage() {
             <div className="hidden md:flex items-center gap-4">
               <Button 
                 onClick={handleAddToCart}
-                disabled={addToCartMutation.isPending}
+                disabled={addToCartMutation.isPending || (book.totalCopies ?? 0) === 0}
                 variant="outline" 
-                className="h-[56px] min-w-[180px] rounded-full border border-blue-600 text-blue-600 font-bold hover:bg-blue-50 text-[16px]"
+                className="h-[56px] min-w-[180px] rounded-full border border-blue-600 text-blue-600 font-bold hover:bg-blue-50 text-[16px] disabled:opacity-50"
               >
-                {addToCartMutation.isPending ? "Adding..." : "Add to Cart"}
+                {addToCartMutation.isPending ? "Adding..." : (book.totalCopies ?? 0) === 0 ? "Out of Stock" : "Add to Cart"}
               </Button>
               <Button 
                 onClick={handleBorrowNow}
-                disabled={borrowBookMutation.isPending}
-                className="h-[56px] min-w-[180px] rounded-full bg-blue-600 text-white font-bold hover:bg-blue-700 shadow-md text-[16px]"
+                disabled={borrowBookMutation.isPending || (book.totalCopies ?? 0) === 0}
+                className="h-[56px] min-w-[180px] rounded-full bg-blue-600 text-white font-bold hover:bg-blue-700 shadow-md text-[16px] disabled:opacity-50"
               >
-                {borrowBookMutation.isPending ? "Borrowing..." : "Borrow Book"}
+                {borrowBookMutation.isPending ? "Borrowing..." : (book.totalCopies ?? 0) === 0 ? "Out of Stock" : "Borrow Book"}
               </Button>
             </div>
           </div>
@@ -288,18 +288,18 @@ export default function BookDetailPage() {
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-[#F2F4F7] p-4 flex gap-4 md:hidden z-40 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
         <Button 
           onClick={handleAddToCart}
-          disabled={addToCartMutation.isPending}
+          disabled={addToCartMutation.isPending || (book.totalCopies ?? 0) === 0}
           variant="outline" 
-          className="h-[48px] flex-1 rounded-full border border-blue-600 text-blue-600 font-bold hover:bg-blue-50 text-[14px]"
+          className="h-[48px] flex-1 rounded-full border border-blue-600 text-blue-600 font-bold hover:bg-blue-50 text-[14px] disabled:opacity-50"
         >
-          {addToCartMutation.isPending ? "..." : "Add to Cart"}
+          {addToCartMutation.isPending ? "..." : (book.totalCopies ?? 0) === 0 ? "Out of Stock" : "Add to Cart"}
         </Button>
         <Button 
           onClick={handleBorrowNow}
-          disabled={borrowBookMutation.isPending}
-          className="h-[48px] flex-[1.5] rounded-full bg-blue-600 text-white font-bold hover:bg-blue-700 shadow-md text-[14px]"
+          disabled={borrowBookMutation.isPending || (book.totalCopies ?? 0) === 0}
+          className="h-[48px] flex-[1.5] rounded-full bg-blue-600 text-white font-bold hover:bg-blue-700 shadow-md text-[14px] disabled:opacity-50"
         >
-          {borrowBookMutation.isPending ? "Borrowing..." : "Borrow Book"}
+          {borrowBookMutation.isPending ? "Borrowing..." : (book.totalCopies ?? 0) === 0 ? "Out of Stock" : "Borrow Book"}
         </Button>
       </div>
     </div>

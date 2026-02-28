@@ -7,10 +7,14 @@ import { LandingNavbar } from "@/components/landing/LandingNavbar";
 import { LandingFooter } from "@/components/landing/LandingFooter";
 import { Loader2, Camera, ChevronLeft } from "lucide-react";
 import { toast } from "sonner";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { setCredentials } from "@/features/auth/authSlice";
 
 export default function UpdateProfilePage() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { user, token } = useAppSelector((state) => state.auth);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [name, setName] = useState("");
@@ -36,11 +40,19 @@ export default function UpdateProfilePage() {
   // ── Mutation ──
   const updateMutation = useMutation({
     mutationFn: userApi.updateProfile,
-    onSuccess: () => {
+    onSuccess: (response) => {
       toast.success("Profil berhasil diperbarui!");
       queryClient.invalidateQueries({ queryKey: ["profile"] });
-      // Also invalidate 'me' if used elsewhere or auth state
       queryClient.invalidateQueries({ queryKey: ["me"] });
+      
+      // Update global auth state with the new user details including profilePhoto
+      if (response && response.data && response.data.profile && user && token) {
+        dispatch(setCredentials({
+          user: { ...user, ...response.data.profile },
+          token: token
+        }));
+      }
+
       navigate("/profile");
     },
     onError: (error: any) => {
@@ -85,7 +97,7 @@ export default function UpdateProfilePage() {
     <div className="min-h-screen bg-neutral-50 font-quicksand flex flex-col">
       <LandingNavbar />
 
-      <main className="flex-1 container mx-auto px-4 md:px-10 py-6 md:py-10 max-w-[1000px]">
+      <main className="w-full mx-auto py-8 px-4 md:px-10">
         <div className="max-w-[557px] mx-auto">
           
           {/* Back Button */}

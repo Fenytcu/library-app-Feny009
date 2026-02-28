@@ -23,6 +23,9 @@ function BookListItem({ book }: { book: Book }) {
     onSuccess: () => {
       toast.success("Book deleted successfully");
       queryClient.invalidateQueries({ queryKey: ["admin-books-highfi"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-books"] });
+      queryClient.invalidateQueries({ queryKey: ["books"] });
+      queryClient.invalidateQueries({ queryKey: ["recommended-books"] });
       setIsDeleteModalOpen(false);
     },
     onError: () => {
@@ -130,7 +133,7 @@ export default function AdminBookListPage() {
 
   return (
     <AdminPanelLayout>
-      <div className="max-w-[1248px] mx-auto px-4 md:px-0">
+      <div className="w-full mx-auto px-4 md:px-10">
         <h1 className="text-[24px] md:text-[28px] font-bold text-[#0A0D12] mb-6">Book List</h1>
 
         {/* Top Button */}

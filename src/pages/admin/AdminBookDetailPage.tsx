@@ -62,7 +62,7 @@ export default function AdminBookDetailPage() {
 
   return (
     <AdminPanelLayout>
-      <div className="max-w-[1200px] mx-auto px-4 md:px-0 pb-20 mt-10">
+      <div className="w-full mx-auto px-4 md:px-10 pb-20 mt-10">
         <div className="flex items-center gap-4 mb-8">
           <Link 
             to="/admin/book-list" 

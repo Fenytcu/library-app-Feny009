@@ -68,7 +68,7 @@ export default function AuthorDetailsPage() {
     <div className="min-h-screen bg-neutral-50 font-quicksand">
       <LandingNavbar />
 
-      <main className="container mx-auto px-4 md:px-10 py-8 md:py-12">
+      <main className="w-full px-4 md:px-10 py-8">
 
         {/* ── Author Header Card ───────────────────────────────────────── */}
         <div className="bg-white rounded-[16px] p-4 md:p-6 shadow-[0_0_20px_rgba(203,202,202,0.25)] mb-8 md:mb-10 flex items-center gap-4 md:gap-5 w-full md:w-fit">

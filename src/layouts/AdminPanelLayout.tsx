@@ -38,7 +38,7 @@ export default function AdminPanelLayout({ children }: AdminPanelLayoutProps) {
     <div className="min-h-screen bg-[#F9FAFB] font-quicksand">
       {/* ── HEADER ── */}
       <header className="bg-white border-b border-[#EAECF0] sticky top-0 z-50">
-        <div className="max-w-[1200px] mx-auto px-6 h-16 flex items-center justify-between">
+        <div className="w-full mx-auto px-6 h-16 flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <img src="/assets/Logo.png" alt="Booky" className="h-8 w-8" />
@@ -60,7 +60,7 @@ export default function AdminPanelLayout({ children }: AdminPanelLayoutProps) {
                 <ChevronDown className="w-4 h-4 text-[#667085]" />
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
+            <DropdownMenuContent align="end" className="w-48 bg-white">
               <DropdownMenuItem asChild>
                 <Link to="/profile" className="cursor-pointer">
                   Profile
@@ -94,7 +94,7 @@ export default function AdminPanelLayout({ children }: AdminPanelLayoutProps) {
         </div>
 
         {/* ── TAB NAVIGATION ── */}
-        <div className="max-w-[1200px] mx-auto px-6">
+        <div className="w-full mx-auto px-6">
           <div className="flex gap-0">
             {NAV_TABS.map((tab) => {
               const isActive = location.pathname === tab.href;
@@ -117,7 +117,7 @@ export default function AdminPanelLayout({ children }: AdminPanelLayoutProps) {
       </header>
 
       {/* ── PAGE CONTENT ── */}
-      <main className="max-w-[1200px] mx-auto px-6 py-8">
+      <main className="w-full mx-auto px-6 py-8">
         {children}
       </main>
     </div>
