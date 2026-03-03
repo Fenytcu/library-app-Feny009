@@ -37,7 +37,7 @@ export function HeroSection() {
       >
         {/* --- SLIDE 1: WELCOME (STATIS) --- */}
         <SwiperSlide>
-          <div className="relative w-full h-[180px] md:h-[441px] overflow-hidden rounded-[16px] md:rounded-[32px]">
+          <div className="relative w-full h-[220px] md:h-[441px] overflow-hidden rounded-[16px] md:rounded-[32px]">
             {/* Background */}
             <img 
               src="/assets/background-welcome.png" 
@@ -49,7 +49,7 @@ export function HeroSection() {
               <img 
                 src="/assets/welcome.png" 
                 alt="Welcome to Booky" 
-                className="w-full max-w-[200px] md:max-w-[656px] object-contain"
+                className="w-auto h-auto max-w-[75%] sm:max-w-[200px] md:max-w-[656px] object-contain"
               />
             </div>
           </div>
@@ -58,23 +58,24 @@ export function HeroSection() {
         {/* --- SLIDE 2 & 3: REKOMENDASI BUKU (DINAMIS DARI API) --- */}
         {recommendedBooks.map((book) => (
           <SwiperSlide key={book.id}>
-            <Link to="/reviews" className="block">
+            <Link to={`/books/${book.id}`} className="block">
               <div className="relative w-full h-[220px] md:h-[441px] bg-slate-200 overflow-hidden rounded-[16px] md:rounded-[32px]">
                 <img 
                   src={book.coverImage} 
                   alt={book.title} 
                   className="w-full h-full object-cover blur-sm opacity-40"
                 />
-                <div className="absolute inset-0 flex flex-col md:flex-row items-center justify-center gap-4 md:gap-10 p-6">
+                <div className="absolute inset-0 flex flex-row items-center justify-center gap-1 sm:gap-6 md:gap-12 p-2 sm:p-4 mx-[2%] sm:mx-[10%] max-w-4xl w-full sm:w-auto">
+                  {/* Left Side: Book Image (Much larger presentation proportionally scaling naturally & border removed) */}
                   <img 
                     src={book.coverImage} 
-                    className="h-[140px] md:h-[280px] rounded-lg shadow-2xl border-4 border-white" 
+                    className="h-[140px] sm:h-[180px] md:h-[320px] w-auto rounded-xl shadow-[0_10px_25px_-5px_rgba(0,0,0,0.4)] object-contain flex-[0.55] sm:flex-[0.7] md:flex-none md:max-w-[45%]" 
                     alt="Book Cover"
                   />
-                  <div className="text-center md:text-left bg-white/90 p-5 rounded-2xl backdrop-blur-md shadow-lg max-w-sm">
-                    <span className="text-blue-600 font-bold text-xs uppercase tracking-widest">Special Recommendation</span>
-                    <h2 className="text-xl md:text-3xl font-bold font-quicksand mt-2 text-neutral-900">{book.title}</h2>
-                    <p className="text-sm md:text-lg text-neutral-600 mt-1 font-medium italic">by {book.authorName}</p>
+                  {/* Right Side: Text Description Box (Constrained max space effectively wrapping tight blocks) */}
+                  <div className="text-left bg-white/95 p-3 sm:p-5 rounded-xl sm:rounded-2xl backdrop-blur-md shadow-lg flex-1 line-clamp-3 md:line-clamp-none min-w-[50%] md:min-w-[40%] text-wrap break-words">
+                    <span className="text-blue-600 font-bold text-[8px] sm:text-[10px] md:text-sm uppercase tracking-widest hidden sm:block mb-1">Special Recommendation</span>
+                    <h2 className="text-[12px] sm:text-xl md:text-3xl font-bold font-quicksand text-neutral-900 leading-[1.3] md:line-clamp-3">{book.title}</h2>
                   </div>
                 </div>
               </div>
